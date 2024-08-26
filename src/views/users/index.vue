@@ -38,7 +38,7 @@
 					<el-table-column label="操作" align="center" width="180px">
 						<template slot-scope="scope">
 							<el-button type="primary" size="small" icon="el-icon-edit" class="button"
-								@click="handleUpdate(scope.row)" plain>编辑=
+								@click="handleUpdate(scope.row)" plain>编辑
 							</el-button>
 							<el-button type="danger" size="small" icon="el-icon-delete"
 								@click="deleteUser(scope.row.stuId)" class="button" plain>删除
@@ -329,6 +329,7 @@
 						console.log(this.tableData);
 					} else {
 					console.error('请求失败，错误消息:', res.data.msg);
+					alert("找不到相关用户")
 					}
 				})
 				.catch((error) => {

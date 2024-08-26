@@ -4,9 +4,8 @@
 			<!-- 操作栏 -->
 			<el-col :span="24">
 				<el-card class="box-card">
-					<el-input v-model="input" placeholder="请输入通知标题" size="small" class="filter-input"></el-input>
-					<el-input v-model="input" placeholder="请输入时间" size="small" class="filter-input"></el-input>
-					<el-button type="primary" icon="el-icon-search" size="small" plain>搜索</el-button>
+					<el-input v-model="title" placeholder="请输入标题" size="small" class="filter-input" clearable></el-input>
+					<el-button type="primary" icon="el-icon-search" size="small" @click="getData()" plain>搜索</el-button>
 					
 					<br />
 					<el-button type="primary" size="small" icon="el-icon-plus" class="button" @click="handleCreate()"
@@ -99,6 +98,8 @@
 				tableData: [],
 				dialogFormVisible: false,
 				dialogFormVisibleEdit:false,
+				title:"",
+				date:"",
 				id:"",
 				/* 表单数据 */
 				formData: {
@@ -220,32 +221,32 @@
 						message: '已取消删除'
 					});
 				});
-			}
+			},
 			
-		// 	/* 条件查询 */
-		// 	getData() {
-		// 		this.axios.post('/user/findStudent', {
-		// 			stuId: this.stuId,
-		// 			stuName: this.stuName
-		// 		}, {
-		// 			headers: {
-		// 			'Content-Type': 'application/json'
-		// 			}
-		// 		})
-		// 		.then((res) => {
-		// 			if (res.data.code == 200) {
-		// 			// 返回学生用户列表
-		// 				this.tableData = res.data.data;
-		// 				console.log(this.tableData);
-		// 			} else {
-		// 			console.error('请求失败，错误消息:', res.data.msg);
-		// 			}
-		// 		})
-		// 		.catch((error) => {
-		// 			console.error('请求失败', error);
-		// 		});
-		// 	}
-		// }
+			/* 条件查询 */
+			getData() {
+				this.axios.post('/api/findNotice', {
+					title: this.title,
+					date: this.date
+				}, {
+					headers: {
+					'Content-Type': 'application/json'
+					}
+				})
+				.then((res) => {
+					if (res.data.code == 200) {
+					// 返回学生用户列表
+						this.tableData = res.data.data;
+						console.log(this.tableData);
+					} else {
+					console.error('请求失败，错误消息:', res.data.msg);
+					alert("找不到相关信息")
+					}
+				})
+				.catch((error) => {
+					console.error('请求失败', error);
+				});
+			}
 		}
 
 	}
