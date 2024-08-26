@@ -29,18 +29,30 @@
 						<el-button style="float: right; padding: 3px 0" type="text">...</el-button>
 					</div>
 					<ul>
-						<li>
-							<img src="../../assets/icon/用户管理.png" />
+						<router-link to="/users">
+							<li>
+								<img src="../../assets/icon/用户管理.png"/>
 							<span class="text">用户管理</span>
 						</li>
-						<li>
-							<img src="../../assets/icon/资讯专区.png" />
-							<span class="text">通知公告</span>
-						</li>
-						<li>
-							<img src="../../assets/icon/报表统计.png" />
-							<span class="text">数据统计</span>
-						</li>
+						</router-link>
+						<router-link to="/notice">
+							<li >
+								<img src="../../assets/icon/资讯专区.png" />
+								<span class="text">通知公告</span>
+							</li>
+						</router-link>
+						<router-link to="/email">
+							<li >
+								<img src="../../assets/icon/电脑.png" />
+								<span class="text">邮件通知</span>
+							</li>
+						</router-link>
+						<router-link to="/data">
+							<li >
+								<img src="../../assets/icon/报表统计.png" />
+								<span class="text">数据统计</span>
+							</li>
+						</router-link>
 					</ul>
 				</el-card>
 			</el-col><!-- 快捷菜单end -->
@@ -105,6 +117,7 @@
 					console.error('请求失败', error);
 				});
 			}
+
 		}
 	}
 </script>
