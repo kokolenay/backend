@@ -36,6 +36,14 @@ const routes = [{
 				}
 			},
 			{
+				path:'/email',
+				name:'学院管理',
+				component:() => import('../views/email'),
+				meta:{
+					title:'邮件通知'
+				}
+			},
+			{
 				path:'/data',
 				name:'数据分析',
 				component:() => import('../views/data'),

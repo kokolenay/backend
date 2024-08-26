@@ -6,23 +6,27 @@
 				<el-card class="box-card">
 					<el-input v-model="title" placeholder="请输入标题" size="small" class="filter-input" clearable></el-input>
 					<el-button type="primary" icon="el-icon-search" size="small" @click="getData()" plain>搜索</el-button>
-					
-					<br />
-					<el-button type="primary" size="small" icon="el-icon-plus" class="button" @click="handleCreate()"
-						plain>新增</el-button>
 				</el-card>
 			</el-col>
 			<!-- 数据列表部分 -->
 			<el-card class="box-card data">
+				<el-button type="primary" size="small" icon="el-icon-plus" class="button" @click="handleCreate()"
+						plain>新增</el-button>
 				<el-table :data="tableData" style="width: 100%" size="small">
 					<el-table-column prop="id" label="序号" sortable>
 						<template slot-scope="scope">
 							<div style="padding-left: 12px;">{{ scope.row.id }}</div>
 						</template>
 					</el-table-column>
-					<el-table-column prop="title" label="通知标题" width="180">
+					<el-table-column prop="title" label="通知标题">
 					</el-table-column>
 					<el-table-column prop="content" label="通知内容">
+					</el-table-column>
+					<el-table-column
+					prop="date"
+					label="通知发布时间"
+					:formatter="formatDate"
+					>
 					</el-table-column>
 					
 					<el-table-column label="操作" align="center" width="180px">
@@ -36,8 +40,8 @@
 				</el-table>
 				<!-- 分页插件 -->
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-					:current-page="currentPage4" :page-size="100" layout="total, prev, pager, next, jumper"
-					:total="100">
+					:current-page="pagination.currentPage" :page-size="pagination.pageSize"
+					layout="total, prev, pager, next, jumper" :total="pagination.total">
 				</el-pagination>
 			</el-card>
 		</el-row>
@@ -107,6 +111,12 @@
 					title: '',
 					content: ''
 				},
+				/* 分页数据模型 */
+				pagination: {
+					currentPage: 1, //当前页码
+					pageSize: 10, //每页显示的记录数
+					total: 0, //总记录数
+				},
 				/*数据校验 */
 				rules: {
 					title: [{
@@ -127,6 +137,15 @@
 			this.handleQuery()
 		},
 		methods: {
+
+			formatDate(row, column, cellValue) {
+				if (!cellValue) return '';
+				const date = new Date(cellValue);
+				const year = date.getFullYear();
+				const month = String(date.getMonth() + 1).padStart(2, '0');
+				const day = String(date.getDate()).padStart(2, '0');
+				return `${year}-${month}-${day}`;
+			},
 			/* 弹出添加窗口 */
 			handleCreate() {
 				this.dialogFormVisible = true
@@ -138,22 +157,27 @@
 				this.formData = row
 			},
 			
-			/* 查询所有通知信息 */
+			/* 查询所有用户信息 */
 			handleQuery() {
-				this.axios.get('/api/notice')
-				.then((res) => {
-					if (res.data.code == 200) {
-					// 返回学生用户列表
-						this.tableData = res.data.data;
-						console.log(this.tableData);
-					} else {
-					console.error('请求失败，错误消息:', res.data.msg);
-					}
-				})
-				.catch((error) => {
-					console.error('请求失败', error);
-				});
+				this.axios.get("/api/noticePage?currentPage=" + this.pagination.currentPage + "&pageSize=" + this.pagination
+						.pageSize)
+					.then((res) => {
+						if (res.data.code == 200) {
+							//将数据设置到表格中
+							this.tableData = res.data.data.list
+							//设置总记录数
+							this.pagination.total = res.data.data.total
+						}
+					})
 			},
+
+			/* 分页查询数据 */
+			handleCurrentChange(currentPage) {
+				this.pagination.currentPage = currentPage
+				//重新加载数据
+				this.handleQuery()
+			},
+
 			
 			/* 添加通知信息 */
 			handleAdd() {

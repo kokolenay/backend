@@ -21,13 +21,13 @@
 					</el-table-column>
 					<el-table-column prop="stuName" label="姓名" >
 					</el-table-column>
-					<el-table-column prop="gender" label="性别">
+					<el-table-column prop="gender" label="性别" >
 					</el-table-column>
 					<el-table-column prop="phone" label="联系电话">
 					</el-table-column>
-					<el-table-column prop="password" label="密码">
+					<el-table-column prop="password" label="密码" width="200px" header-align="center">
 					</el-table-column>
-					<el-table-column prop="idCard" label="身份证号码">
+					<el-table-column prop="idCard" label="身份证号码" width="300px" header-align="center">
 					</el-table-column>
 					<el-table-column prop="status" label="状态">
 						<template slot-scope="scope">
@@ -221,12 +221,14 @@
 
 			/* 查询所有用户信息 */
 			handleQuery() {
-				this.axios.get('/user/findAllStudent')
+				this.axios.get("/user/studentPage?currentPage=" + this.pagination.currentPage + "&pageSize=" + this.pagination
+						.pageSize)
 				.then((res) => {
 					if (res.data.code == 200) {
-					// 返回学生用户列表
-						this.tableData = res.data.data;
-						console.log(this.tableData);
+						//将数据设置到表格中
+						this.tableData = res.data.data.list
+						//设置总记录数
+						this.pagination.total = res.data.data.total
 					} else {
 					console.error('请求失败，错误消息:', res.data.msg);
 					}

@@ -19,6 +19,7 @@
 					</template>
 					<el-menu-item index="/users">用户管理</el-menu-item>
 					<el-menu-item index="/notice">通知管理</el-menu-item>
+					<el-menu-item index="/email">邮件通知</el-menu-item>
 				</el-submenu>
 				<el-submenu index="3">
 					<template slot="title">
