@@ -64,16 +64,16 @@
 					captcha: 'http://127.0.0.1:8081/user/api/captcha',
 					code:''
 				},
+				userInfo: {
+					id: "",
+					password: "",
+					username: ""
+				},
 				/* 定义表单校验规则 */
 				rules: {
 					username: [{
 						required: true,
 						message: '请输入用户名',
-						trigger: 'blur'
-					}, {
-						min: 3,
-						max: 8,
-						message: '长度在 3 到 5 个字符',
 						trigger: 'blur'
 					}],
 					password: [{
@@ -104,6 +104,8 @@
 						this.axios.post("/user/userLogin",this.formData).then((res)=>{
 							if(res.data.code==200){
 								this.$message.success("登录成功")
+								var userInfo = res.data.data; // 假设后端返回的用户信息在 data 属性中
+								localStorage.setItem('userInfo', JSON.stringify(userInfo));
 								this.$router.push("/home")
 							}else{
 								this.$message.error(res.data.msg)

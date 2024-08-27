@@ -51,6 +51,22 @@ const routes = [{
 					title:'数据分析'
 				}
 			},
+			{
+				path:'/person',
+				name:'个人中心',
+				component:() => import('../views/person'),
+				meta:{
+					title:'个人中心'
+				}
+			},
+			{
+				path:'/classes',
+				name:'课程管理',
+				component:() => import('../views/classes'),
+				meta:{
+					title:'课程管理'
+				}
+			},
 		]
 	},
 

@@ -4,8 +4,7 @@
 			<el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
 				:collapse="isCollapse" unique-opened :collapse-transition="collapse-transition" router>
 				<div class="system-title">
-					<img src="../../assets/logo1.png" />
-					<span v-if="title">重庆大学</span>
+					<img src="../../assets/logo-workspace.1d5ca1b8.png" />
 				</div>
 				<el-menu-item index="/welcome">
 					<i class="el-icon-s-home"></i>
@@ -18,17 +17,17 @@
 						<span slot="title">系统管理</span>
 					</template>
 					<el-menu-item index="/users">用户管理</el-menu-item>
+					<el-menu-item index="/classes">课程管理</el-menu-item>
 					<el-menu-item index="/notice">通知管理</el-menu-item>
-					<el-menu-item index="/email">邮件通知</el-menu-item>
 				</el-submenu>
-				<el-submenu index="3">
-					<template slot="title">
-						<i class="el-icon-s-data"></i>
-						<span slot="title">数据分析</span>
-					</template>
-					<el-menu-item index="/data" @click="toDate('http://127.0.0.1:5500/index.html')">统计分析
-					</el-menu-item>
-				</el-submenu>
+				<el-menu-item index="/email">
+					<i class="el-icon-s-home"></i>
+					<span slot="title">邮件通知</span>
+				</el-menu-item>
+				<el-menu-item index="/data" @click="toDate('http://127.0.0.1:5500/index.html')">
+					<i class="el-icon-s-data"></i>
+					<span slot="title">数据分析</span>
+				</el-menu-item>
 			</el-menu>
 		</el-aside>
 		<el-container class="inner-container">
@@ -47,11 +46,15 @@
 					</div>
 					<el-dropdown placement="top">
 						<span class="el-dropdown-link">
-							root<i class="el-icon-arrow-down el-icon--right"></i>
+							{{userInfo.username}}<i class="el-icon-arrow-down el-icon--right"></i>
 						</span>
 						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item>个人中心</el-dropdown-item>
-							<el-dropdown-item @click.native="exit">退出登录</el-dropdown-item>
+							<router-link to="/person" tag="div">
+								<el-dropdown-item>个人中心</el-dropdown-item>
+							</router-link>
+							<router-link to="/" tag="div">
+								<el-dropdown-item>退出登录</el-dropdown-item>
+							</router-link>
 						</el-dropdown-menu>
 					</el-dropdown>
 				</div>
@@ -79,8 +82,14 @@
 		data() {
 			return {
 				isCollapse: false,
-				title: true
+				title: true,
+				userInfo:{
+
+				}
 			}
+		},
+		mounted() {
+			this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
 		},
 		methods: {
 			collapse() {
@@ -134,7 +143,7 @@
 
 	/* 系统标题 */
 	.system-title {
-		background-color: rgb(52, 140, 255);
+		background-color: rgb(0, 82, 168);
 		font-size: 20px;
 		color: #ffffff;
 		height: 60px;
@@ -146,10 +155,10 @@
 
 	/* logo */
 	.system-title img {
-		width: 50px;
+		width: 150px;
 		position: absolute;
 		top: 4px;
-		left: 10px;
+		left: 20px;
 	}
 
 	/* 鼠标经过 */

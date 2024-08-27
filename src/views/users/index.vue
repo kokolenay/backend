@@ -25,8 +25,7 @@
 					</el-table-column>
 					<el-table-column prop="phone" label="联系电话">
 					</el-table-column>
-					<el-table-column prop="password" label="密码" width="200px" header-align="center">
-					</el-table-column>
+					
 					<el-table-column prop="idCard" label="身份证号码" width="300px" header-align="center">
 					</el-table-column>
 					<el-table-column prop="status" label="状态">
@@ -103,6 +102,22 @@
 				<el-row>
 					<el-col :span="24">
 						<el-form :model="formData" :rules="rules" ref="formData">	
+							<el-upload
+                            class="upload-demo"
+                            action="http://localhost:8081/file/upload" 
+                            :on-success="handleUploadSuccess"
+                            :on-error="handleUploadError"
+                            :before-upload="beforeUpload"
+                            :data="uploadData"
+                            :headers="uploadHeaders"
+                            accept="image/*"
+                            list-type="picture"
+							style="margin-left: 100px; margin-bottom: 20px;"
+                            >
+								<el-button slot="trigger" size="small" type="primary">选择图片</el-button>
+								<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
+                            </el-upload>
+
 							<el-form-item label="姓名" prop="stuName" label-position="right" label-width="100px">
 								<el-input v-model="formData.stuName" autocomplete="off"></el-input>
 							</el-form-item>
@@ -119,10 +134,6 @@
 							
 							<el-form-item label="密码" prop="password" label-position="right" label-width="100px">
 								<el-input v-model="formData.password"></el-input>
-							</el-form-item>
-							
-							<el-form-item label="身份证号码" prop="idCard" label-position="right" label-width="100px">
-								<el-input v-model="formData.idCard"></el-input>
 							</el-form-item>
 							
 							<el-form-item label="用户状态" label-position="right" label-width="100px">
@@ -162,7 +173,8 @@
 					status: '',
 					gender:'',
 					password:',',
-					idCard:''
+					idCard:'',
+					image:''
 				},
 
 				/* 分页数据模型 */
@@ -313,7 +325,7 @@
 					});
 				});
 			},
-
+			
 			/* 条件查询 */
 			getData() {
 				this.axios.post('/user/findStudent', {
@@ -337,7 +349,42 @@
 				.catch((error) => {
 					console.error('请求失败', error);
 				});
-			}
+			},
+			/* 上传图片到服务器的方法 */
+            beforeUpload(file) {
+            // 可以在这里进行文件的大小或类型校验
+            const isJPG = file.type === 'image/jpeg';
+            const isPNG = file.type === 'image/png';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG && !isPNG) {
+                this.$message.error('上传图片只能是 JPG 或 PNG 格式!');
+                return false;
+            }
+            if (!isLt2M) {
+                this.$message.error('上传图片大小不能超过 2MB!');
+                return false;
+            }
+            return true;
+            },
+			
+            // 上传成功的回调
+            handleUploadSuccess(response) {
+				
+				this.formData.image=response.data;
+            if (response.code === 200) {
+                this.$message.success("图片上传成功");
+               
+				
+            } else {
+                this.$message.error("图片上传失败");
+            }
+            },
+            // 上传失败的回调
+            handleUploadError(err) {
+            this.$message.error("上传过程中出错");
+            console.log(err);
+            }
 		}
 
 	}

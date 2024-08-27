@@ -12,9 +12,9 @@
 					<img src="../../assets/u169.svg" />
 					<div class="person_msg">
 					<ul class="per_msg_content">
-						<li>姓名: root</li>
-						<li>工号: 001</li>
-						<li>学院: 计算机学院</li>
+						<li>姓名: {{ userInfo.username }}</li>
+						<li>工号: 00{{ userInfo.id }}</li>
+						<li >学院: 计算机学院</li>
 						<li>上次登录时间: 2024-08-25</li>
 						<li>上次登录IP: 192.168.73.100</li>
 					</ul>
@@ -35,6 +35,12 @@
 							<span class="text">用户管理</span>
 						</li>
 						</router-link>
+						<router-link to="/classes">
+							<li>
+								<img src="../../assets/icon/作品管理.png"/>
+							<span class="text">课程管理</span>
+						</li>
+						</router-link>
 						<router-link to="/notice">
 							<li >
 								<img src="../../assets/icon/资讯专区.png" />
@@ -47,12 +53,10 @@
 								<span class="text">邮件通知</span>
 							</li>
 						</router-link>
-						<router-link to="/data">
-							<li >
+							<li  @click="toDate('http://127.0.0.1:5500/index.html')">
 								<img src="../../assets/icon/报表统计.png" />
 								<span class="text">数据统计</span>
 							</li>
-						</router-link>
 					</ul>
 				</el-card>
 			</el-col><!-- 快捷菜单end -->
@@ -74,7 +78,9 @@
 				<el-card class="box-card notice">
 					<div slot="header" class="clearfix">
 						<span>通知公告</span>
-						<el-button style="float: right; padding: 3px 0" type="text">查看更多</el-button>
+						<router-link to="/notice">
+							<el-button style="float: right; padding: 3px 0" type="text" >查看更多</el-button>
+						</router-link>
 					</div>
 					<div class="text">
 						<ul>
@@ -94,11 +100,14 @@
 	export default{
 		data(){
 			return{
-				tableData:[]
+				tableData:[],
+				userInfo:{
+				}
 			}
 		},
 		mounted() {
-			this.handleQuery()
+			this.handleQuery();
+			this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
 		},
 		methods: {
 			/* 查询所有用户信息 */
@@ -108,7 +117,6 @@
 					if (res.data.code == 200) {
 					// 返回通知用户列表
 						this.tableData = res.data.data;
-						console.log(this.tableData);
 					} else {
 					console.error('请求失败，错误消息:', res.data.msg);
 					}
@@ -116,6 +124,9 @@
 				.catch((error) => {
 					console.error('请求失败', error);
 				});
+			},
+			toDate(url) {
+				window.location.href = url;
 			}
 
 		}
