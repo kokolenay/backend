@@ -26,8 +26,8 @@
 						<i class="el-icon-s-data"></i>
 						<span slot="title">数据分析</span>
 					</template>
-					<el-menu-item index="/data">统计分析</el-menu-item>
-
+					<el-menu-item index="/data" @click="toDate('http://127.0.0.1:5500/index.html')">统计分析
+					</el-menu-item>
 				</el-submenu>
 			</el-menu>
 		</el-aside>
@@ -104,6 +104,9 @@
 			},
 			exit(){
 				this.$router.push('/');
+			},
+			toDate(url) {
+				window.location.href = url;
 			}
 		}
 	}
